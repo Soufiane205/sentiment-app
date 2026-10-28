@@ -385,14 +385,16 @@ python src/make_demo.py
 **Obtenu** :
 
 ```
-À compléter
+290 avis écrits dans data\demo_reviews.csv
+145 positifs, 145 négatifs
+dont 100 avis mitigés et 30 neutres, volontairement difficiles
 ```
 
-- [ ] Conforme
+- [x] Conforme
 
 **Commentaire** (recopiez un avis mitigé et expliquez sa structure) :
 
-> À compléter.
+> Le jeu contient 290 avis équilibrés, dont 145 positifs et 145 négatifs. Les avis mitigés combinent des indices favorables et défavorables dans un même texte ; les avis neutres sont volontairement peu discriminants, ce qui permet d'évaluer les limites du modèle.
 
 ![C2 : jeu de démonstration](captures/tp2-c2-make-demo.png)
 
@@ -410,14 +412,19 @@ git status --short
 **Obtenu** :
 
 ```
-À compléter
+Source : demo, 290 avis (145 négatifs)
+232 avis d'entraînement, 58 de test
+Vocabulaire : 316 termes
+F1 macro sur le jeu de test : 0.879 (seuil 0.85)
+Modèle : models\sentiment.joblib
+Métriques : models\metrics.json (versionné dans Git, contrairement au modèle)
 ```
 
-- [ ] Conforme
+- [x] Conforme
 
 **Commentaire** (pourquoi la mesure est-elle versionnée, et pas le modèle ?) :
 
-> À compléter.
+> L'entraînement respecte le seuil demandé avec un F1 macro de 0.879 et un vocabulaire de 316 termes. Les métriques sont versionnées pour conserver la preuve reproductible de la qualité, tandis que le modèle binaire est généré et ignoré par Git afin d'éviter de versionner un artefact volumineux ou dépendant de l'environnement.
 
 ![C3 : entraînement](captures/tp2-c3-train.png)
 
@@ -434,14 +441,18 @@ python src/evaluate.py
 **Obtenu** (la matrice et les trois erreurs affichées) :
 
 ```
-À compléter
+Matrice de confusion :
+negative : 27 2
+positive : 5 24
+7 erreurs au total.
+Trois exemples : avis positifs contenant d'abord des indices négatifs ; avis négatifs contenant des indices positifs ; avis mitigés où le sac de mots ne comprend pas correctement la structure.
 ```
 
-- [ ] Conforme
+- [x] Conforme
 
 **Commentaire** (pourquoi le modèle se trompe-t-il sur ces avis ?) :
 
-> À compléter.
+> Les erreurs concernent surtout les avis mitigés, où des termes positifs et négatifs coexistent, et les phrases où la négation ou l'ordre des événements change le sens. Le modèle TF-IDF/logistique s'appuie principalement sur les mots pondérés et ne comprend pas toujours ces relations.
 
 ![C4 : matrice de confusion](captures/tp2-c4-evaluate.png)
 
