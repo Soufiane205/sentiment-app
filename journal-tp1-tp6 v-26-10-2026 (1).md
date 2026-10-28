@@ -208,14 +208,14 @@ python -m pytest -q
 origin : https://github.com/Soufiane205/sentiment-app.git
 git status : aucun fichier .env, .venv/ ou fichier .joblib suivi
 tests/test_git_history.py : 3 passed in 0.52s
-Fichiers locaux non suivis : docs/captures/, journal-tp1-tp6 v-26-10-2026 (1).md, requirements.lock
+Push réussi : main -> origin/main
 ```
 
-- [ ] Conforme
+- [x] Conforme
 
 **Commentaire** (quel test échoue encore, et pourquoi ?) :
 
-> Le dépôt distant `origin` est configuré vers `Soufiane205/sentiment-app` et aucun fichier sensible n'est suivi par Git. Le test ciblé de l'historique passe avec 3 tests réussis. T3 ne peut pas encore être déclaré conforme : les fichiers indiqués par `git status` doivent être traités et le résultat d'un `git push` n'a pas été vérifié dans ce contrôle.
+> Le dépôt distant `origin` est configuré vers `Soufiane205/sentiment-app`, le journal et les captures ont été ajoutés, puis le push vers `main` a réussi. Aucun fichier `.env`, `.venv` ou `.joblib` n'est suivi par Git ; le test ciblé de l'historique passe avec 3 tests réussis.
 
 ![T3 : le dépôt sur GitHub](captures/tp1-t3-depot-github.png)
 
@@ -237,14 +237,14 @@ python scripts/check_setup.py
 **Obtenu** :
 
 ```
-À compléter
+Contrôle à exécuter sur le poste du membre B.
 ```
 
 - [ ] Conforme
 
 **Commentaire** :
 
-> À compléter.
+> Ce contrôle doit être réalisé sur le poste de Soufiane après un clone frais. Je ne peux pas certifier l'environnement d'un autre poste depuis cette machine.
 
 ![T4 : diagnostic du membre B](captures/tp1-t4-check-setup-b.png)
 
@@ -266,14 +266,18 @@ python -m pytest tests/test_git_history.py -q
 **Obtenu** :
 
 ```
-À compléter
+git shortlog -sn --all :
+28 Soufiane KHALDOUN
+11 Taha Tahir
+1 Claude
+tests/test_git_history.py : 3 passed in 0.62s
 ```
 
-- [ ] Conforme
+- [x] Conforme
 
 **Commentaire** :
 
-> À compléter.
+> L'historique contient bien deux auteurs du binôme distincts, Taha Tahir et Soufiane KHALDOUN. Le test ciblé de l'historique Git passe avec 3 tests réussis ; le troisième auteur correspond à un commit existant dans l'historique.
 
 ![T5 : deux auteurs](captures/tp1-t5-shortlog.png)
 
@@ -292,14 +296,15 @@ python -m pytest -q
 **Obtenu** :
 
 ```
-À compléter
+Diagnostic : 0 erreur(s), 0 avertissement(s). Tout est en place.
+Tests TP1 ciblés : 38 passed in 2.90s
 ```
 
-- [ ] Conforme
+- [x] Conforme
 
 **Commentaire** :
 
-> À compléter.
+> Le diagnostic final du TP1 est entièrement conforme et les tests ciblés de l'environnement, du cadrage et de l'historique Git passent. Le résultat actuel est `38 passed`, différent de l'ancien attendu indiqué dans le modèle.
 
 ![T6 : pytest final](captures/tp1-t6-pytest.png)
 
@@ -325,14 +330,15 @@ python -m pytest -q
 **Obtenu** :
 
 ```
-À compléter
+Clone GitHub créé dans le dossier temporaire.
+Installation complète des dépendances interrompue avant la fin : aucun résultat T7 certifié.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (qu'est-ce que ce contrôle prouve que T6 ne prouvait pas ?) :
 
-> À compléter.
+> À compléter après l'installation et l'exécution réussies dans le clone frais. T7 doit prouver que le dépôt est reproductible sans dépendre de l'environnement de travail déjà configuré.
 
 ![T7 : clone frais](captures/tp1-t7-clone-frais.png)
 
