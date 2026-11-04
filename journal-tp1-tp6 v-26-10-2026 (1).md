@@ -1254,14 +1254,18 @@ pour l'entraînement local et la relecture ; la CI installe la branche 1.5 depui
 
 ### T41 · Version, étiquette, push
 
-**Obtenu** : code, tests, compte rendu, `CHANGELOG.md` et workflow TP6 prêts.
-Le workflow construit la roue, l'installe hors du dépôt et la conserve dans
-l'artefact `sentiment-app-wheel`. Publication et résultat distant à confirmer
-après l'exécution du workflow sur GitHub ; aucune CI verte distante n'est
-présumée à partir des tests locaux.
+**Obtenu** : le commit de code `152705e` est publié sur `origin/main`.
+Les livrables et le journal sont livrés sous le tag `v0.6.0` lors de la
+finalisation. Le workflow construit la roue, l'installe hors du dépôt et la
+conserve dans l'artefact `sentiment-app-wheel` après réussite.
+L'[exécution GitHub 41877763496](https://github.com/Soufiane205/sentiment-app/actions/runs/41877763496)
+a été déclenchée pour le commit de code. Au dernier contrôle, elle était en
+file d'attente (`queued`), sans étape démarrée et sans verdict. Aucune CI verte
+distante n'est présumée à partir des tests locaux.
 
-- [x] Version et livrables locaux prêts.
-- [ ] Publication Git et CI distante à confirmer.
+- [x] Version, livrables et commit de code publiés sur `main`.
+- [x] Livraison versionnée `v0.6.0`.
+- [ ] CI distante : verdict à confirmer après la disponibilité d'un runner GitHub.
 
 **Commentaire** : la version provient de `sentiment_app/__init__.py`. La livraison
 doit porter le tag `v0.6.0`. Le résultat distant est consultable sur
@@ -1328,7 +1332,7 @@ Une ligne par blocage : le message exact, ce qui le provoquait, ce qui l'a régl
 
 **TP6** :
 
-> Le projet fournit un paquet installable, une commande et une roue vérifiée hors du dépôt. Le modèle reste externe et son chemin est configurable. Les 111 tests réussis et la couverture API à 100 % valident le code local ; la CI et le second poste doivent aussi être contrôlés. Les étapes pédagogiques intermédiaires non mesurées ne sont pas présentées comme des observations.
+> Le projet fournit un paquet installable, une commande et une roue vérifiée hors du dépôt. Le modèle reste externe et son chemin est configurable. Les 111 tests réussis et la couverture API à 100 % valident le code local. Le code est publié sur GitHub ; le workflow déclenché attendait un runner au dernier contrôle. Le résultat distant et le contrôle sur le second poste restent à confirmer. Les étapes pédagogiques intermédiaires non mesurées ne sont pas présentées comme des observations.
 
 ---
 

@@ -58,5 +58,7 @@ un essai local sans téléchargement ; elle ne constitue pas une installation au
 des dépendances. La CI utilise le mode normal.
 
 Les résultats locaux sont consignés dans le journal du TP6 et dans
-`docs/validation-tp6.txt`. Le résultat de GitHub Actions et le contrôle sur le poste
-du deuxième membre doivent être confirmés séparément.
+`docs/validation-tp6.txt`. Le commit de code `152705e` est publié sur `main`.
+La livraison est versionnée `v0.6.0`. L'[exécution GitHub Actions du code](https://github.com/Soufiane205/sentiment-app/actions/runs/41877763496)
+était en file d'attente au dernier contrôle, sans étape démarrée : son verdict
+reste à confirmer. Le contrôle sur le poste du deuxième membre reste à réaliser.

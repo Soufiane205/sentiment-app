@@ -128,3 +128,7 @@ Contrôles complémentaires observés :
 - Le script check_wheel a terminé avec le code 0, sans --reuse-dependencies.
   La notification de mise à jour pip sur stderr a été formatée comme NativeCommandError
   par le pipeline PowerShell ; l'installation et les assertions ont réussi.
+
+Publication : commit de code 152705e pousse sur origin/main.
+GitHub Actions 41877763496 : queued, aucune etape demarree au dernier controle.
+https://github.com/Soufiane205/sentiment-app/actions/runs/41877763496
