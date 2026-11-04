@@ -33,9 +33,9 @@ def predict_sentiment(body: AvisRequest):
     try:
         result = predict(body.texte)
     except FileNotFoundError as e:
-        raise HTTPException(status_code=503, detail=str(e))
+        raise HTTPException(status_code=503, detail=str(e)) from e
     except ValueError as e:
-        raise HTTPException(status_code=422, detail=str(e))
+        raise HTTPException(status_code=422, detail=str(e)) from e
 
     verdict = "✅ Positif" if result["label"] == "positive" else "❌ Négatif"
     return AvisResponse(label=result["label"], score=result["score"], verdict=verdict)

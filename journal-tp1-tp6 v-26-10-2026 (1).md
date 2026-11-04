@@ -1139,220 +1139,147 @@ streamlit run ui/app.py
 
 ## TP6 : packager l'application
 
+Contrôles réalisés le 4 novembre 2026 avec Python 3.11.9 et scikit-learn 1.5.2.
+Les traces locales sont conservées dans [validation-tp6.txt](docs/validation-tp6.txt).
+Les images proposées par le modèle du journal ne sont pas présentées comme des
+captures réalisées : les résultats ci-dessous proviennent des commandes et tests.
+
 ### T35 · Le kit installé (membre A)
 
-```powershell
-python C:\IA-DEV\tp6-packaging\appliquer_tp6.py C:\IA-DEV\sentiment-app
-pip install -r requirements-dev.txt
-python -m pytest -q
-```
+**Obtenu** : les fichiers utiles du kit TP6 ont été intégrés : paquet,
+configuration de packaging et six tests de `tests/test_packaging.py`. Les sept
+tests fournis dans `test_commande_sentiment.py` sont aussi placés dans `tests/`.
 
-&nbsp;
-
-**Attendu** : 2 failed, voulus : `test_le_modele_se_place_ou_l_on_veut` et `test_l_api_ne_bricole_plus_le_chemin_de_python`
-
-**Obtenu** :
-
-```
-À compléter
-```
-
-- [ ] Conforme
-
-**Commentaire** (que réclame chacun des deux échecs ?) :
-
-> À compléter.
-
-![T35](captures/tp6-t35-pytest.png)
+**Commentaire** : les deux échecs pédagogiques initiaux n'ont pas été enregistrés
+avant correction. Ils réclamaient de rendre le chemin du modèle configurable et
+de retirer la modification de `sys.path` dans l'API. L'état final vérifie ces deux
+conditions ; on ne prétend pas avoir observé une exécution intermédiaire en échec.
 
 ### T36 · predict.py dans le paquet
 
 ```powershell
-git mv src/predict.py sentiment_app/predict.py
-Copy-Item C:\IA-DEV\tp6-packaging\extraits\predict_compatibilite.py src\predict.py
-python -m pytest -q
-python src/predict.py "Livraison rapide, produit conforme, très satisfait"
+.\.venv\Scripts\python.exe src/predict.py "Livraison rapide, produit conforme, très satisfait"
 ```
 
-&nbsp;
+**Obtenu** : `positive (confiance 78%)`, code 0.
 
-**Attendu** : 1 failed ; `positive (confiance 78%)`
+- [x] Déplacement et compatibilité vérifiés dans l'état final.
 
-**Obtenu** :
-
-```
-À compléter
-```
-
-- [ ] Conforme
-
-**Commentaire** (à quoi sert le fichier de compatibilité ?) :
-
-> À compléter.
-
-![T36](captures/tp6-t36-deplacement.png)
+**Commentaire** : la fonction vit dans `sentiment_app/predict.py`. Le fichier
+`src/predict.py` est un adaptateur : à l'import, il renvoie le même module. Les
+anciens appels et les tests qui modifient `predict.MODELE` restent valables.
+Le passage pédagogique par un seul test en échec n'a pas été rejoué.
 
 ### T37 · L'API branchée sur le paquet
 
 ```powershell
-python -m pytest -q
+.\.venv\Scripts\python.exe -m pytest -q --cov=api --cov-report=term-missing --cov-fail-under=95
 Select-String -Path api\*.py -Pattern "sys.path"
-ruff check .
-mypy api
+.\.venv\Scripts\python.exe -m ruff check .
+.\.venv\Scripts\python.exe -m mypy api
 ```
 
-&nbsp;
+**Obtenu** : `111 passed, 1 xfailed, 1 warning`, couverture de `api/` : 100 %.
+Les trois tests Git sont compris dans les réussites. Le `xfail` est l'erreur
+connue du jeu d'or ; l'avertissement est une dépréciation de Starlette/AnyIO.
+Ruff : `All checks passed!`. Mypy : `Success: no issues found in 4 source files`.
+Le test de packaging confirme l'absence de `sys.path` dans `api/`.
 
-**Attendu** : aucun failed ; `Select-String` ne trouve rien ; ruff et mypy muets
+- [x] Conforme dans l'état final.
 
-**Obtenu** :
-
-```
-À compléter
-```
-
-- [ ] Conforme
-
-**Commentaire** (qu'est-ce qui a changé dans api/model.py ?) :
-
-> À compléter.
-
-![T37](captures/tp6-t37-api.png)
+**Commentaire** : `api/model.py` importe maintenant le prédicteur depuis
+`sentiment_app.predict`. Deux anciens problèmes de chaînage d'exceptions dans
+`app/main.py` ont aussi été corrigés pour que Ruff passe sur tout le dépôt.
 
 ### T38 · La commande sentiment
 
 ```powershell
-pip install -e .
-sentiment --version
-sentiment predict "Livraison rapide, produit conforme, très satisfait"
-sentiment predict "xqzvb wlkptr grombu"
-sentiment serve
+.\.venv\Scripts\python.exe -m pip install -e ".[ui]"
+.\.venv\Scripts\sentiment.exe --version
+.\.venv\Scripts\sentiment.exe predict "Livraison rapide, produit conforme, très satisfait"
+.\.venv\Scripts\sentiment.exe predict "xqzvb wlkptr grombu"
+.\.venv\Scripts\sentiment.exe serve
 ```
 
-&nbsp;
+**Obtenu** : installation éditable vérifiée (dépendances déjà présentes localement),
+`sentiment-app 0.6.0`, `POSITIVE` avec 0.777, puis `INDETERMINE` avec 0.5162.
+L'API lancée réellement par `sentiment serve` a répondu : `/health` 200 et `OK`,
+`/predict` 200 et `POSITIVE`, `/docs` 200. `sentiment ui` a lancé Streamlit en mode
+sans navigateur : `/_stcore/health` 200 et `ok`, page `/` 200. Les serveurs de
+vérification ont été arrêtés. Les tests de l'interface vérifient aussi le parcours
+avec l'API en mémoire ; aucune inspection visuelle du navigateur n'est revendiquée.
 
-**Attendu** : `sentiment-app 0.6.0` ; `POSITIVE` 0.777 ; `INDETERMINE` 0.5162 ; `/health` répond `OK`
+- [x] Version, prédiction et démarrage des services vérifiés.
 
-**Obtenu** :
-
-```
-À compléter
-```
-
-- [ ] Conforme
-
-**Commentaire** (pourquoi « predict » applique-t-il aussi le seuil d'abstention ?) :
-
-> À compléter.
-
-![T38](captures/tp6-t38-commande.png)
+**Commentaire** : la commande appelle `api.model.load_model()`, comme l'API.
+Le seuil d'abstention de 0,60 et les étiquettes du contrat sont donc communs.
+Le score 0.7684 de « Livraison rapide, très satisfait » concerne un texte différent
+de celui donnant 0.777 ; il ne traduit pas une erreur de packaging.
 
 ### T39 · La roue
 
 ```powershell
-Remove-Item -Recurse -Force dist -ErrorAction SilentlyContinue
-python -m build --wheel
+.\.venv\Scripts\python.exe -m build --wheel
 ```
 
-&nbsp;
+**Obtenu** : `Successfully built sentiment_app-0.6.0-py3-none-any.whl`.
+La construction standard a utilisé un environnement isolé. L'inspection de
+l'archive confirme les trois paquets `api`, `sentiment_app`, `ui` et leurs
+métadonnées uniquement : aucun test, jeu de données ou modèle.
 
-**Attendu** : `sentiment_app-0.6.0-py3-none-any.whl`, avec `api`, `sentiment_app`, `ui` seulement
+- [x] Conforme.
 
-**Obtenu** :
-
-```
-À compléter
-```
-
-- [ ] Conforme
-
-**Commentaire** (pourquoi ni tests, ni données, ni modèle ?) :
-
-> À compléter.
-
-![T39](captures/tp6-t39-roue.png)
+**Commentaire** : le modèle possède son propre cycle de vie. La roue déclare
+les dépendances d'exécution ; les outils de développement restent séparés.
 
 ### T40 · La roue hors du dépôt
 
 ```powershell
-cd $env:TEMP
-py -3.11 -m venv roue-tp6
-roue-tp6\Scripts\pip install C:\IA-DEV\sentiment-app\dist\sentiment_app-0.6.0-py3-none-any.whl
-roue-tp6\Scripts\sentiment predict "Livraison rapide, produit conforme, très satisfait"
-$env:SENTIMENT_MODELE = "C:\IA-DEV\sentiment-app\models\sentiment.joblib"
-roue-tp6\Scripts\sentiment predict "Livraison rapide, produit conforme, très satisfait"
+.\.venv\Scripts\python.exe scripts/check_wheel.py dist/sentiment_app-0.6.0-py3-none-any.whl --model models/sentiment.joblib
 ```
 
-&nbsp;
+**Obtenu** : un venv neuf a été créé dans un dossier temporaire, sans réutilisation
+des dépendances du projet. Pip y a installé la roue et ses dépendances téléchargées.
+Les imports des trois paquets ont été contrôlés : ils proviennent du nouveau venv.
+Depuis le dossier temporaire, sans `SENTIMENT_MODELE` : « modèle introuvable », code 1.
+Avec le chemin absolu du modèle : `POSITIVE` 0.777 ; mots inconnus : `INDETERMINE` 0.5162.
+Conclusion du script : `Roue installée et exécutée hors du dépôt : OK.`
 
-**Attendu** : sans la variable : « modèle introuvable », code 1 ; avec : `POSITIVE` 0.777
+- [x] Conforme, avec installation autonome des dépendances.
 
-**Obtenu** :
-
-```
-À compléter
-```
-
-- [ ] Conforme
-
-**Commentaire** (qu'a-t-il fallu fournir à la roue, et qu'a-t-elle installé seule ?) :
-
-> À compléter.
-
-![T40](captures/tp6-t40-ailleurs.png)
+**Commentaire** : il a fallu fournir le fichier du modèle et son chemin. Pip a
+installé les bibliothèques déclarées par la roue. scikit-learn 1.5.2 est utilisé
+pour l'entraînement local et la relecture ; la CI installe la branche 1.5 depuis
+`pyproject.toml` avant d'entraîner son propre modèle.
 
 ### T41 · Version, étiquette, push
 
-```powershell
-git add -A
-git commit -m "Semaine 6 : paquet installable, version 0.6.0"
-git tag -a v0.6.0 -m "TP6 : paquet installable"
-git push
-git push origin v0.6.0
-```
+**Obtenu** : code, tests, compte rendu, `CHANGELOG.md` et workflow TP6 prêts.
+Le workflow construit la roue, l'installe hors du dépôt et la conserve dans
+l'artefact `sentiment-app-wheel`. Publication et résultat distant à confirmer
+après l'exécution du workflow sur GitHub ; aucune CI verte distante n'est
+présumée à partir des tests locaux.
 
-&nbsp;
+- [x] Version et livrables locaux prêts.
+- [ ] Publication Git et CI distante à confirmer.
 
-**Attendu** : CI verte, étape « Roue installée hors du dépôt (TP6) » comprise ; l'étiquette `v0.6.0` visible sur GitHub
-
-**Obtenu** :
-
-```
-À compléter
-```
-
-- [ ] Conforme
-
-**Commentaire** :
-
-> À compléter.
-
-![T41](captures/tp6-t41-actions.png)
+**Commentaire** : la version provient de `sentiment_app/__init__.py`. La livraison
+doit porter le tag `v0.6.0`. Le résultat distant est consultable sur
+[GitHub Actions](https://github.com/Soufiane205/sentiment-app/actions).
 
 ### Membre B, après le TP6
 
+À exécuter sur le poste du deuxième membre après publication :
+
 ```powershell
-git pull
-pip install -e .
-python -m pytest -q
-sentiment --version
+git pull --ff-only
+.\.venv\Scripts\python.exe -m pip install -e ".[ui]" "pytest==8.3.*" -r requirements-dev.txt
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\sentiment.exe --version
 ```
 
-&nbsp;
-
-**Attendu** : aucun `failed`, puis `sentiment-app 0.6.0`.
-
-**Obtenu** :
-
-```
-À compléter
-```
-
-- [ ] Conforme
-
-![TP6 : poste du membre B](captures/tp6-membre-b.png)
-
-> Les commandes de ce TP, leurs notions préalables et les points d'attention (ordre de T36, paquet `build`) sont expliqués dans l'**annexe H**, à la fin de ce journal.
+**État** : contrôle sur le deuxième poste non réalisé dans cette intervention.
+Les résultats et captures de ce poste doivent être ajoutés par son utilisateur.
 
 ---
 
@@ -1401,7 +1328,7 @@ Une ligne par blocage : le message exact, ce qui le provoquait, ce qui l'a régl
 
 **TP6** :
 
-> À compléter.
+> Le projet fournit un paquet installable, une commande et une roue vérifiée hors du dépôt. Le modèle reste externe et son chemin est configurable. Les 111 tests réussis et la couverture API à 100 % valident le code local ; la CI et le second poste doivent aussi être contrôlés. Les étapes pédagogiques intermédiaires non mesurées ne sont pas présentées comme des observations.
 
 ---
 

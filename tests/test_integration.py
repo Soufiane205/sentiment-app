@@ -53,7 +53,7 @@ def test_modele_absent_l_api_refuse_de_demarrer(monkeypatch, tmp_path, cache_vid
     from api.main import app
 
     monkeypatch.setattr(predict, "MODELE", tmp_path / "absent.joblib")
-    with pytest.raises(FileNotFoundError, match="sentiment.joblib absent"):
+    with pytest.raises(FileNotFoundError, match="modèle introuvable"):
         with TestClient(app):
             pass
 

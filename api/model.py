@@ -1,18 +1,13 @@
 """Raccord entre l'API et le modèle entraîné au TP2.
 
 L'API n'entraîne rien et ne connaît pas scikit-learn : elle appelle la fonction
-predict() de src/predict.py, qui charge models/sentiment.joblib une seule fois.
+predict() de sentiment_app/predict.py, qui charge le modèle une seule fois.
 """
-import sys
-from pathlib import Path
 from typing import TypedDict
 
 from api.schemas import Etiquette
-
-RACINE = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(RACINE / "src"))
-from predict import charger_modele  # noqa: E402  (fonctions du TP2, src/ ajouté juste au-dessus)
-from predict import predict as _predict  # noqa: E402
+from sentiment_app.predict import charger_modele
+from sentiment_app.predict import predict as _predict
 
 # Sous ce seuil de confiance, l'API s'abstient : l'avis part vers un humain (TP4, étape C).
 # 0,60 sur le jeu de test du TP2 : 72 % des avis traités, 2 erreurs au lieu de 7 (courbe_seuil.py).
@@ -51,5 +46,5 @@ class SentimentClassifier:
 
 
 def load_model() -> SentimentClassifier:
-    """Construit le classifier (le cache de chargement est dans src/predict.py)."""
+    """Construit le classifier (le cache est dans sentiment_app/predict.py)."""
     return SentimentClassifier()
